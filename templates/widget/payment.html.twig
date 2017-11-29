@@ -1,0 +1,14 @@
+<h1>{{ header }}</h1>
+<p>
+    Current Workflow : {{ currentWorkflow }}
+</p>
+<p>
+    Current Place : {{ currentPlace }}
+</p>
+<p>
+    {{ dump(transitions) }}
+</p>
+<form method="post" action="/widget/form">
+    <input type="hidden" name="workflow" value="{{ currentWorkflow }}">
+    <input type="submit" value="Retour">
+</form>

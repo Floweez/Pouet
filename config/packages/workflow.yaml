@@ -1,0 +1,28 @@
+framework:
+    workflows:
+        widget_simple:
+            type: 'state_machine'
+            marking_store:
+                type: 'single_state' # or 'multiple_state'
+                arguments:
+                    - 'currentPlace'
+            supports:
+                - App\Entity\Widget
+            places:
+                - tickets
+                - form
+                - payment
+                - confirmation
+            transitions:
+                select_cart:
+                    from:   tickets
+                    to:     form
+                modify_cart:
+                    from:   form
+                    to:     tickets
+                confirm_attendee:
+                    from:   form
+                    to:     payment
+                confirm_payment:
+                    from:   payment
+                    to:     confirmation

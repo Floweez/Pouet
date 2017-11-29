@@ -1,0 +1,18 @@
+<h1>{{ header }}</h1>
+<p>
+    Current Workflow : {{ currentWorkflow }}
+</p>
+<p>
+    Current Place : {{ currentPlace }}
+</p>
+<p>
+    {{ dump(transitions) }}
+</p>
+<form method="post" action="/widget/payment">
+    <input type="hidden" name="workflow" value="{{ currentWorkflow }}">
+    <input type="submit" value="Suivant">
+</form>
+<form method="post" action="/widget">
+    <input type="hidden" name="workflow" value="{{ currentWorkflow }}">
+    <input type="submit" value="Précédent">
+</form>
