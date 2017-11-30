@@ -14,7 +14,7 @@ framework:
                 - payment
                 - confirmation
             transitions:
-                select_cart:
+                confirm_cart:
                     from:   tickets
                     to:     form
                 modify_cart:
@@ -23,6 +23,9 @@ framework:
                 confirm_attendee:
                     from:   form
                     to:     payment
+                modify_attendee:
+                    from:   payment
+                    to:     form
                 confirm_payment:
                     from:   payment
                     to:     confirmation
