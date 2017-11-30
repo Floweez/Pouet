@@ -18,6 +18,8 @@ class WidgetController extends Controller
      * @param Registry $workflows
      * @param Request $request
      * @return Response
+     *
+     * Instanciate a new widget
      */
     public function indexAction(Registry $workflows, Request $request, Widget $widget)
     {
@@ -34,83 +36,4 @@ class WidgetController extends Controller
         ]);
     }
 
-    /**
-     * @Route("/widget/form")
-     * @param Registry $workflows
-     * @param string $workflowToUse
-     */
-    public function selectCartAction(Registry $workflows, Request $request, Widget $widget)
-    {
-        $currentWorkflow = $request->get('workflow') ? : 'widget_simple';
-        $workflow = $workflows->get($widget, $currentWorkflow);
-
-        try {
-            $workflow->apply($widget, 'select_cart');
-
-            // Get les formulaires associés au cart submitted et render
-
-            return $this->render('widget/form.html.twig', [
-                'header' => "Formulaire participants",
-                'currentWorkflow' => $workflow->getName(),
-                'transitions' => $workflow->getEnabledTransitions($widget),
-                'currentPlace' => $widget->currentPlace,
-                'widget' => $widget
-            ]);
-        } catch (LogicException $e) {
-            return new Response('
-                <html>
-                    <body>
-                        Tu peux pas transitionner comme ça: '.$e->getMessage().' <br>
-                        -> CurrentPlace : '.$widget->currentPlace.'
-                    </body>
-                </html>
-            ');
-            // ... if the transition is not allowed
-        }
-    }
-
-    /**
-     * @Route("/widget/payment")
-     * @param Registry $workflows
-     * @param Request $request
-     * @return Response
-     */
-    public function confirmAttendeeAction(Registry $workflows, Request $request, Widget $widget)
-    {
-        $currentWorkflow = $request->get('workflow') ? : 'widget_simple';
-        $workflow = $workflows->get($widget, $currentWorkflow);
-
-        try {
-            $workflow->apply($widget, 'confirm_attendee');
-
-            // Get les formulaires associés au cart submitted et render
-
-            return $this->render('widget/payment.html.twig', [
-                'header' => "Payment",
-                'currentWorkflow' => $workflow->getName(),
-                'transitions' => $workflow->getEnabledTransitions($widget),
-                'currentPlace' => $widget->currentPlace
-            ]);
-        } catch (LogicException $e) {
-            return new Response('
-                <html>
-                    <body>
-                        Tu peux pas transitionner comme ça: '.$e->getMessage().' <br>
-                        -> CurrentPlace : '.$widget->currentPlace.'
-                    </body>
-                </html>
-            ');
-            // ... if the transition is not allowed
-        }
-    }
-
-    /**
-     * @Route("/widget/{whatever}")
-     */
-    public function pouetAction($whatever)
-    {
-        return new Response(
-            '<html><body>Nope: '.$whatever.'</body></html>'
-        );
-    }
 }

@@ -12,8 +12,6 @@ use Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface;
 class Widget implements MarkingStoreInterface
 {
     public $currentPlace;
-    public $title;
-    public $content;
 
     public function getMarking($subject)
     {
