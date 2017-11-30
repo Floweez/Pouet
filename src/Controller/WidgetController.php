@@ -14,28 +14,7 @@ use Symfony\Component\Workflow\Exception\LogicException;
 class WidgetController extends Controller
 {
     /**
-     * @Route("/widget")
-     * @param Registry $workflows
-     * @param Request $request
-     * @param Widget $widget
-     * @return Response
-     */
-    public function indexAction(Registry $workflows, Request $request, Widget $widget)
-    {
-        $currentWorkflow = $request->get('workflow', 'widget_simple');
-        $workflow = $workflows->get($widget, $currentWorkflow);
-
-        return $this->render('widget/index.html.twig', [
-            'header' => "Sélection de tickets",
-            'currentWorkflow' => $workflow->getName(),
-            'transitions' => $workflow->getEnabledTransitions($widget),
-            'currentPlace' => $widget->getCurrentPlace(),
-            'widget' => $widget
-        ]);
-    }
-
-    /**
-     * @Route("/widget/transition", name="process_transition")
+     * @Route("/widget", name="process_transition")
      * @param Registry $workflows
      * @param Request $request
      * @param Widget $widget
@@ -44,22 +23,27 @@ class WidgetController extends Controller
     public function processTransition(Registry $workflows, Request $request, Widget $widget)
     {
         $currentWorkflow = $request->get('workflow', 'widget_simple');
-        $currentPlace = $request->get('currentPlace');
         $workflow = $workflows->get($widget, $currentWorkflow);
+        $enabledTransitions = $workflow->getEnabledTransitions($widget);
+        $currentPlace = $request->get('currentPlace', $widget->getCurrentPlace());
+        $transition = $request->get('transition');
 
         try {
             $widget->setCurrentPlace($currentPlace);
-            $workflow->apply($widget, $request->get('transition'));
+            if ($transition) {
+                $workflow->apply($widget, $request->get('transition'));
+                $enabledTransitions = $workflow->getEnabledTransitions($widget);
+            }
+
             return $this->render('widget/index.html.twig', [
-                'header' => "Sélection de tickets",
-                'currentWorkflow' => $workflow->getName(),
-                'transitions' => $workflow->getEnabledTransitions($widget),
+                'header' => "Workflow : " . $workflow->getName(),
+                'transitions' => $enabledTransitions,
                 'currentPlace' => $widget->getCurrentPlace(),
+                'currentWorkflow' => $workflow->getName(),
                 'widget' => $widget
             ]);
         } catch (LogicException $e) {
             return new Response("C'est mort pour: $e");
         }
     }
-
 }
