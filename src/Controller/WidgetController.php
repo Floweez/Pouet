@@ -10,7 +10,10 @@ use Symfony\Component\Workflow\Registry;
 use App\Entity\Widget;
 use Symfony\Component\Workflow\Exception\LogicException;
 
-
+/**
+ * Class WidgetController
+ * @package App\Controller
+ */
 class WidgetController extends Controller
 {
     /**
@@ -29,8 +32,8 @@ class WidgetController extends Controller
         $transition = $request->get('transition');
 
         try {
-            $widget->setCurrentPlace($currentPlace);
             if ($transition) {
+                $widget->setCurrentPlace($currentPlace);
                 $workflow->apply($widget, $request->get('transition'));
                 $enabledTransitions = $workflow->getEnabledTransitions($widget);
             }

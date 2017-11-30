@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\MarkingStore\MarkingStoreInterface;
-use Symfony\Component\Workflow\Workflow;
 
 /**
  * Class Widget
@@ -64,11 +63,19 @@ class Widget implements MarkingStoreInterface
         $this->currentPlace = $currentPlace;
     }
 
+    /**
+     * @param object $subject
+     * @return Marking|void
+     */
     public function getMarking($subject)
     {
         // TODO: Implement getMarking() method.
     }
 
+    /**
+     * @param object $subject
+     * @param Marking $marking
+     */
     public function setMarking($subject, Marking $marking)
     {
         // TODO: Implement setMarking() method.
