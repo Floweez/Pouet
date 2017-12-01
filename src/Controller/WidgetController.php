@@ -23,8 +23,11 @@ class WidgetController extends Controller
      * @param Widget $widget
      * @return Response
      */
-    public function processTransition(Registry $workflows, Request $request, Widget $widget)
+    public function processTransition(Registry $workflows, Request $request, Widget $widget = null)
     {
+        if (!$widget) {
+            $widget = new Widget();
+        }
         dump('A');
         $currentWorkflow = $request->get('workflow', 'widget_simple');
         dump('B');
