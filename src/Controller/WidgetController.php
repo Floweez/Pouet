@@ -25,17 +25,27 @@ class WidgetController extends Controller
      */
     public function processTransition(Registry $workflows, Request $request, Widget $widget)
     {
+        dump('A');
         $currentWorkflow = $request->get('workflow', 'widget_simple');
+        dump('B');
         $workflow = $workflows->get($widget, $currentWorkflow);
+        dump('C');
         $enabledTransitions = $workflow->getEnabledTransitions($widget);
+        dump('D');
         $currentPlace = $request->get('currentPlace', $widget->getCurrentPlace());
+        dump('E');
         $transition = $request->get('transition');
+        dump('F');
 
         try {
             if ($transition) {
+                dump('G');
                 $widget->setCurrentPlace($currentPlace);
+                dump('H');
                 $workflow->apply($widget, $request->get('transition'));
+                dump('I');
                 $enabledTransitions = $workflow->getEnabledTransitions($widget);
+                dump('J');
             }
 
             return $this->render('widget/index.html.twig', [
